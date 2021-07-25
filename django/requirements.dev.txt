@@ -1,0 +1,7 @@
+# Main file
+-r ./requirements.txt
+
+# Debug/Dev stuff
+django-debug-toolbar
+flake8
+black

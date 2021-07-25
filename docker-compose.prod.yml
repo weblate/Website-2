@@ -6,7 +6,7 @@ services:
     image: kartoza/postgis
     restart: always
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data_prod:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=trainerdex
       - POSTGRES_DB=trainerdex
@@ -19,14 +19,14 @@ services:
       retries: 5
   django:
     container_name: django
-    build: django
-    command: python /django/manage.py runserver 0.0.0.0:8000
+    build:
+      context: django
+      dockerfile: Dockerfile.prod
+    command: gunicorn --bind 0.0.0.0:8000 trainerdex.wsgi
     ports:
       - "8000:8000"
-    volumes:
-      - ./django:/django
     environment:
-      - DEBUG=1
+      - DEBUG=0
       - DATABASE_URL=postgis://trainerdex:trainerdex@db:5432/trainerdex
       - SECRET_KEY="ReplaceMe"
       - GOOGLE_ANALYTICS_MEASUREMENT_ID="None"
@@ -38,4 +38,4 @@ services:
       db:
         condition: service_healthy
 volumes:
-  postgres_data:
+  postgres_data_prod:

@@ -1,4 +1,4 @@
-﻿import os
+import os
 import environ
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy
@@ -15,7 +15,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env("DEBUG")
+# Will error if anything other than 0/1
+DEBUG = bool(int(env("DEBUG")))
 
 ALLOWED_HOSTS = ["*"]
 
@@ -80,7 +81,7 @@ LOCALE_PATHS = [
 ROOT_URLCONF = "trainerdex.urls"
 
 # DjangoDebugToolbar
-if DEBUG is True:
+if DEBUG:
     INSTALLED_APPS.append("debug_toolbar")
     MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
     INTERNAL_IPS = ["127.0.0.1"]

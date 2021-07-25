@@ -14,8 +14,9 @@ ENV PYTHONUNBUFFERED 1
 RUN apt-get update && \
     apt-get install -y --no-install-recommends gdal-bin
 COPY requirements.txt .
+COPY requirements.dev.txt .
 RUN pip install -U pip && \
-    pip install -r requirements.txt
+    pip install -r requirements.dev.txt
 
 # copy project
 COPY . .
