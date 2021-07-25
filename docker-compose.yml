@@ -1,4 +1,4 @@
-version: '3.4'
+version: '3.8'
 
 services:
   db:
@@ -8,17 +8,30 @@ services:
     volumes:
       - /opt/tdx_db:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD=password
+      - POSTGRES_PASSWORD=trainerdex
       - POSTGRES_DB=trainerdex
       - POSTGRES_USER=trainerdex
       - POSTGRES_MULTIPLE_EXTENSIONS=postgis,citext
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   django:
     container_name: django
     build: django
-    command: python /code/manage.py runserver 0.0.0.0:8000
-    volumes:
-      - ./django:/code
+    command: python /django/manage.py runserver 0.0.0.0:8000
     ports:
       - "8000:8000"
+    environment:
+      - DEBUG=1
+      - DATABASE_URL=postgis://trainerdex:trainerdex@db:5432/trainerdex
+      - SECRET_KEY="ReplaceMe"
+      - GOOGLE_ANALYTICS_MEASUREMENT_ID="None"
+      - EMAIL_HOST_PASSWORD="None"
+      - DISCORD_CLIENT_ID=0
+      - DISCORD_CLIENT_SECRET="DISCORD_CLIENT_SECRET"
+      - DISCORD_TOKEN="DISCORD_TOKEN"
     depends_on:
-      - db
+      db:
+        condition: service_healthy

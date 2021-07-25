@@ -1,7 +1,9 @@
 ﻿import os
-
+import environ
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy
+
+env = environ.Env()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -10,10 +12,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "***REMOVED***"
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = ["*"]
 
@@ -108,13 +110,7 @@ WSGI_APPLICATION = "trainerdex.wsgi.application"
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.contrib.gis.db.backends.postgis",
-        "NAME": "trainerdex",
-        "USER": "trainerdex",
-        "PASSWORD": "password",
-        "HOST": "db",
-    }
+    "default": env.db(),
 }
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
@@ -219,7 +215,7 @@ SOCIALACCOUNT_QUERY_EMAIL = True
 
 # Google Analytics
 
-GOOGLE_ANALYTICS_MEASUREMENT_ID = "***REMOVED***"
+GOOGLE_ANALYTICS_MEASUREMENT_ID = env("GOOGLE_ANALYTICS_MEASUREMENT_ID")
 
 # Django Cities
 # https://github.com/coderholic/django-cities#configuration
@@ -235,7 +231,7 @@ EMAIL_HOST = "smtp.eu.mailgun.org"
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = "postmaster@mmg.trainerdex.app"
-EMAIL_HOST_PASSWORD = "***REMOVED***"
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = "TrainerDex Support <jay@trainerdex.app>"
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
@@ -251,9 +247,9 @@ HELPDESK_STAFF_ONLY_TICKET_CC = True
 
 # DISCORD
 
-DISCORD_CLIENT_ID = 0  # ***REMOVED***
-DISCORD_CLIENT_SECRET = "***REMOVED***"
-DISCORD_TOKEN = "***REMOVED***"
+DISCORD_CLIENT_ID = env("DISCORD_CLIENT_ID")
+DISCORD_CLIENT_SECRET = env("DISCORD_CLIENT_SECRET")
+DISCORD_TOKEN = env("DISCORD_TOKEN")
 
 # CONSTANTS
 
